@@ -1,6 +1,6 @@
 # Omniauth::Challengepost
 
-TODO: Write a gem description
+Use this gem to authenticate against the (future) ChallengePost user api.
 
 ## Installation
 
@@ -18,7 +18,8 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+The ChallengePost user api only exists in development. Production version
+coming soon!
 
 ## Contributing
 

@@ -9,34 +9,29 @@ module OmniAuth
       option :name, "challengepost"
 
       option :client_options, {
-        :site => 'http://fountainhead.dev',
+        :site => (ENV['CHALLENGEPOST_FOUNTAINHEAD_URL'] || 'http://fountainhead.challengepost.com'),
         :authorize_url => '/oauth/authorize',
         :token_url => '/oauth/access_token'
       }
 
       option :authorize_options, [:scope]
 
-      option :token_params, {
-        :mode => :query,
-        :parse => :query
-      }
-
       uid { raw_info['id'] }
 
       info do
         prune!({
-                  'nickname' => raw_info['screen_name'],
-                  'email' => raw_info['email'],
-                  'location' => raw_info['location'],
-                  'first_name' => raw_info['first_name'],
-                  'last_name' => raw_info['last_name']
-                })
+          'nickname' => raw_info['screen_name'],
+          'email' => raw_info['email'],
+          'location' => raw_info['location'],
+          'first_name' => raw_info['first_name'],
+          'last_name' => raw_info['last_name']
+        })
       end
 
       extra do
         prune!({
-                  'raw_info' => raw_info
-                })
+          'raw_info' => raw_info
+        })
       end
 
       def authorize_params
@@ -47,6 +42,7 @@ module OmniAuth
       end
 
       def raw_info
+        access_token.options[:mode] = :query
         @raw_info ||= access_token.get("/oauth/user.json").parsed
       end
 

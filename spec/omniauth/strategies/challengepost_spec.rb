@@ -21,7 +21,6 @@ describe OmniAuth::Strategies::Challengepost do
 
   it { should be_a(OmniAuth::Strategies::OAuth2) }
 
-
   describe '#client' do
     it 'has correct Facebook site' do
       subject.client.site.should eq('http://fountainhead.dev')
@@ -73,12 +72,6 @@ describe OmniAuth::Strategies::Challengepost do
       subject.authorize_params[:scope].should eq('user, admin')
     end
 
-  end
-
-  describe '#token_params' do
-    it 'has correct parse strategy' do
-      subject.token_params[:parse].should eq(:query)
-    end
   end
 
   describe '#uid' do
@@ -160,12 +153,12 @@ describe OmniAuth::Strategies::Challengepost do
 
   describe '#raw_info' do
     before :each do
-      @access_token = double('OAuth2::AccessToken')
+      @access_token = double('OAuth2::AccessToken', :options => {})
       subject.stub(:access_token) { @access_token }
     end
 
     it 'performs a GET to /oauth/user.json' do
-      @access_token.stub(:get) { double('OAuth2::Response').as_null_object }
+      @access_token.stub(:get) { @access_token.as_null_object }
       @access_token.should_receive(:get).with('/oauth/user.json')
       subject.raw_info
     end
