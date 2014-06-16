@@ -5,13 +5,13 @@ module OmniAuth
   module Strategies
     class Challengepost < OmniAuth::Strategies::OAuth2
       DEFAULT_SCOPE = "user"
+      OMNIAUTH_PROVIDER_SITE = ENV.fetch('OMNIAUTH_PROVIDER_SITE') { 'http://challengepost.com' }
 
       option :name, "challengepost"
 
       option :client_options, {
-        :site => (ENV['CHALLENGEPOST_FOUNTAINHEAD_URL'] || 'http://fountainhead.challengepost.com'),
-        :authorize_url => '/oauth/authorize',
-        :token_url => '/oauth/access_token'
+        :site => OMNIAUTH_PROVIDER_SITE,
+        :authorize_url => '/oauth/authorize'
       }
 
       option :authorize_options, [:scope]
@@ -34,6 +34,10 @@ module OmniAuth
         })
       end
 
+      def raw_info
+        @raw_info ||= raw_credentials_json["user"]
+      end
+
       def authorize_params
         super.tap do |params|
           %w[scope].each { |v| params[v.to_sym] = request.params[v] if request.params[v] }
@@ -41,12 +45,14 @@ module OmniAuth
         end
       end
 
-      def raw_info
-        access_token.options[:mode] = :query
-        @raw_info ||= access_token.get("/oauth/user.json").parsed
-      end
-
       protected
+
+      def raw_credentials_json
+        @raw_credentials_json ||= begin
+                                    access_token.options[:mode] = :query
+                                    access_token.get("/user/credentials").parsed
+                                  end
+      end
 
       def prune!(hash)
         hash.delete_if do |_, value|
