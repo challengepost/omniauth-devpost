@@ -7,6 +7,7 @@ describe OmniAuth::Strategies::Challengepost do
     @request.stub(:params) { {} }
     @request.stub(:cookies) { {} }
     @request.stub(:env) { {} }
+    @request.stub(:scheme) { 'http' }
 
     @app_id = '123'
     @app_secret = '53cr3tz'
@@ -50,26 +51,6 @@ describe OmniAuth::Strategies::Challengepost do
       @request.stub(:url) { "#{url_base}/some/page" }
       subject.stub(:script_name) { '' } # as not to depend on Rack env
       subject.callback_url.should eq("#{url_base}/auth/CP/done")
-    end
-
-  end
-
-  describe '#authorize_options' do
-    it 'includes default scope for email and offline access' do
-      subject.authorize_params.should be_a(Hash)
-      subject.authorize_params[:scope].should eq('user')
-    end
-
-    it 'includes scope parameter from request when present' do
-      @request.stub(:params) { { 'scope' => 'admin' } }
-      subject.authorize_params.should be_a(Hash)
-      subject.authorize_params[:scope].should eq('admin')
-    end
-
-    it 'includes scope parameter from request when present' do
-      @request.stub(:params) { { 'scope' => 'user, admin' } }
-      subject.authorize_params.should be_a(Hash)
-      subject.authorize_params[:scope].should eq('user, admin')
     end
 
   end

@@ -38,13 +38,6 @@ module OmniAuth
         @raw_info ||= raw_credentials_json["user"]
       end
 
-      def authorize_params
-        super.tap do |params|
-          %w[scope].each { |v| params[v.to_sym] = request.params[v] if request.params[v] }
-          params[:scope] ||= DEFAULT_SCOPE
-        end
-      end
-
       protected
 
       def raw_credentials_json
