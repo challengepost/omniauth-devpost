@@ -6,8 +6,8 @@ module OmniAuth
     class Challengepost < OmniAuth::Strategies::OAuth2
       DEFAULT_SCOPE = "user"
       OMNIAUTH_PROVIDER_SITE = ENV.fetch('OMNIAUTH_PROVIDER_SITE') { 'https://api.challengepost.com' }
-      OMNIAUTH_AUTHORIZE_URL = ENV.fetch('OMNIAUTH_AUTHORIZE_URL') { 'https://challengepost.com/oauth/authorize' }
-      OMNIAUTH_TOKEN_URL     = ENV.fetch('OMNIAUTH_TOKEN_URL') { 'https://challengepost.com/oauth/token' }
+      OMNIAUTH_AUTHORIZE_URL = ENV.fetch('OMNIAUTH_AUTHORIZE_URL') { 'https://oauth.challengepost.com/oauth/authorize' }
+      OMNIAUTH_TOKEN_URL     = ENV.fetch('OMNIAUTH_TOKEN_URL') { 'https://oauth.challengepost.com/oauth/token' }
 
       option :name, "challengepost"
 

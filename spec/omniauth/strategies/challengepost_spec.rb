@@ -29,11 +29,11 @@ describe OmniAuth::Strategies::Challengepost do
     end
 
     it 'has correct authorize url' do
-      expect(subject.client.options[:authorize_url]).to eq('https://challengepost.com/oauth/authorize')
+      expect(subject.client.options[:authorize_url]).to eq('https://oauth.challengepost.com/oauth/authorize')
     end
 
     it 'has correct token url' do
-      expect(subject.client.options[:token_url]).to eq('https://challengepost.com/oauth/token')
+      expect(subject.client.options[:token_url]).to eq('https://oauth.challengepost.com/oauth/token')
     end
   end
 
