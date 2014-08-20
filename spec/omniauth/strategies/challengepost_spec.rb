@@ -5,10 +5,10 @@ require 'uri'
 describe OmniAuth::Strategies::Challengepost do
   before do
     @request = double('Request')
-    @request.stub(:params) { {} }
-    @request.stub(:cookies) { {} }
-    @request.stub(:env) { {} }
-    @request.stub(:scheme) { 'http' }
+    allow(@request).to receive(:params) { {} }
+    allow(@request).to receive(:cookies) { {} }
+    allow(@request).to receive(:env) { {} }
+    allow(@request).to receive(:scheme) { 'http' }
 
     @app_id = '123'
     @app_secret = '53cr3tz'
@@ -17,7 +17,7 @@ describe OmniAuth::Strategies::Challengepost do
   subject do
     args = [@app_id, @app_secret, @options].compact
     OmniAuth::Strategies::Challengepost.new(nil, *args).tap do |strategy|
-      strategy.stub(:request) { @request }
+      allow(strategy).to receive(:request) { @request }
     end
   end
 
@@ -41,16 +41,16 @@ describe OmniAuth::Strategies::Challengepost do
 
     it "returns the default callback url" do
       url_base = 'http://auth.request.com'
-      @request.stub(:url) { "#{url_base}/some/page" }
-      subject.stub(:script_name) { '' } # as not to depend on Rack env
+      allow(@request).to receive(:url) { "#{url_base}/some/page" }
+      allow(subject).to receive(:script_name) { '' } # as not to depend on Rack env
       expect(subject.callback_url).to eq("#{url_base}/auth/challengepost/callback")
     end
 
     it "returns path from callback_path option" do
       url_base = 'http://auth.request.com'
       @options = { :callback_path => "/auth/CP/done"}
-      @request.stub(:url) { "#{url_base}/some/page" }
-      subject.stub(:script_name) { '' } # as not to depend on Rack env
+      allow(@request).to receive(:url) { "#{url_base}/some/page" }
+      allow(subject).to receive(:script_name) { '' } # as not to depend on Rack env
       expect(subject.callback_url).to eq("#{url_base}/auth/CP/done")
     end
 
@@ -58,7 +58,7 @@ describe OmniAuth::Strategies::Challengepost do
 
   describe '#uid' do
     before :each do
-      subject.stub(:raw_info) { { 'id' => '123' } }
+      allow(subject).to receive(:raw_info) { { 'id' => '123' } }
     end
 
     it 'returns the id from raw_info' do
@@ -70,7 +70,7 @@ describe OmniAuth::Strategies::Challengepost do
     context 'when optional data is not present in raw info' do
       before :each do
 
-        subject.stub(:raw_info) { {} }
+        allow(subject).to receive(:raw_info) { {} }
       end
 
       it 'has no email key' do
@@ -98,7 +98,7 @@ describe OmniAuth::Strategies::Challengepost do
     context 'when optional data is present in raw info' do
       before :each do
         @raw_info ||= { 'screen_name' => 'fredsmith' }
-        subject.stub(:raw_info) { @raw_info }
+        allow(subject).to receive(:raw_info) { @raw_info }
       end
 
       it 'returns the name' do
@@ -137,25 +137,25 @@ describe OmniAuth::Strategies::Challengepost do
   describe '#raw_info' do
     before :each do
       @access_token = double('OAuth2::AccessToken', :options => {})
-      subject.stub(:access_token) { @access_token }
+      allow(subject).to receive(:access_token) { @access_token }
     end
 
-    it 'performs a GET to /oauth/user.json' do
-      @access_token.stub(:get) { @access_token.as_null_object }
-      @access_token.should_receive(:get).with('/user/credentials')
+    it 'performs a GET to /user/credentials' do
+      allow(@access_token).to receive(:get) { @access_token.as_null_object }
+      expect(@access_token).to receive(:get).with('/user/credentials')
       subject.raw_info
     end
 
     it 'returns a Hash' do
-      @access_token.stub(:get).with('/user/credentials') do
+      allow(@access_token).to receive(:get).with('/user/credentials') do
         raw_response = double('Faraday::Response')
-        raw_response.stub(:body) { '{ "user" : { "ohai": "thar" } }' }
-        raw_response.stub(:status) { 200 }
-        raw_response.stub(:headers) { { 'Content-Type' => 'application/json' } }
+        allow(raw_response).to receive(:body) { '{ "user" : { "ohai": "thar" } }' }
+        allow(raw_response).to receive(:status) { 200 }
+        allow(raw_response).to receive(:headers) { { 'Content-Type' => 'application/json' } }
         OAuth2::Response.new(raw_response)
       end
-      subject.raw_info.should be_a(Hash)
-      subject.raw_info['ohai'].should eq('thar')
+      expect(subject.raw_info).to be_a(Hash)
+      expect(subject.raw_info['ohai']).to eq('thar')
     end
   end
 
