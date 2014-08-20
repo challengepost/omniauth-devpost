@@ -5,7 +5,7 @@ module OmniAuth
   module Strategies
     class Challengepost < OmniAuth::Strategies::OAuth2
       DEFAULT_SCOPE = "user"
-      OMNIAUTH_PROVIDER_SITE = ENV.fetch('OMNIAUTH_PROVIDER_SITE') { 'http://challengepost.com' }
+      OMNIAUTH_PROVIDER_SITE = ENV.fetch('OMNIAUTH_PROVIDER_SITE') { 'https://challengepost.com' }
 
       option :name, "challengepost"
 
@@ -15,6 +15,8 @@ module OmniAuth
       }
 
       option :authorize_options, [:scope]
+
+      # For more info, see https://github.com/intridea/omniauth/wiki/Auth-Hash-Schema
 
       uid { raw_info['id'] }
 
