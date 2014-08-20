@@ -5,13 +5,16 @@ module OmniAuth
   module Strategies
     class Challengepost < OmniAuth::Strategies::OAuth2
       DEFAULT_SCOPE = "user"
-      OMNIAUTH_PROVIDER_SITE = ENV.fetch('OMNIAUTH_PROVIDER_SITE') { 'https://challengepost.com' }
+      OMNIAUTH_PROVIDER_SITE = ENV.fetch('OMNIAUTH_PROVIDER_SITE') { 'https://api.challengepost.com' }
+      OMNIAUTH_AUTHORIZE_URL = ENV.fetch('OMNIAUTH_AUTHORIZE_URL') { 'https://challengepost.com/oauth/authorize' }
+      OMNIAUTH_TOKEN_URL     = ENV.fetch('OMNIAUTH_TOKEN_URL') { 'https://challengepost.com/oauth/token' }
 
       option :name, "challengepost"
 
       option :client_options, {
         :site => OMNIAUTH_PROVIDER_SITE,
-        :authorize_url => '/oauth/authorize'
+        :authorize_url => OMNIAUTH_AUTHORIZE_URL,
+        :token_url => OMNIAUTH_TOKEN_URL
       }
 
       option :authorize_options, [:scope]
@@ -45,7 +48,7 @@ module OmniAuth
       def raw_credentials_json
         @raw_credentials_json ||= begin
                                     access_token.options[:mode] = :query
-                                    access_token.get("/user/credentials").parsed
+                                    access_token.get('/user/credentials').parsed
                                   end
       end
 

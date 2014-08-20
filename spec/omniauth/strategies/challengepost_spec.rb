@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'omniauth-challengepost'
+require 'uri'
 
 describe OmniAuth::Strategies::Challengepost do
   before do
@@ -24,15 +25,15 @@ describe OmniAuth::Strategies::Challengepost do
 
   describe '#client' do
     it 'has correct Facebook site' do
-      subject.client.site.should eq('http://challengepost.com')
+      expect(subject.client.site).to eq('https://api.challengepost.com')
     end
 
     it 'has correct authorize url' do
-      subject.client.options[:authorize_url].should eq('/oauth/authorize')
+      expect(subject.client.options[:authorize_url]).to eq('https://challengepost.com/oauth/authorize')
     end
 
     it 'has correct token url' do
-      subject.client.options[:token_url].should eq('/oauth/token')
+      expect(subject.client.options[:token_url]).to eq('https://challengepost.com/oauth/token')
     end
   end
 
@@ -42,7 +43,7 @@ describe OmniAuth::Strategies::Challengepost do
       url_base = 'http://auth.request.com'
       @request.stub(:url) { "#{url_base}/some/page" }
       subject.stub(:script_name) { '' } # as not to depend on Rack env
-      subject.callback_url.should eq("#{url_base}/auth/challengepost/callback")
+      expect(subject.callback_url).to eq("#{url_base}/auth/challengepost/callback")
     end
 
     it "returns path from callback_path option" do
@@ -50,7 +51,7 @@ describe OmniAuth::Strategies::Challengepost do
       @options = { :callback_path => "/auth/CP/done"}
       @request.stub(:url) { "#{url_base}/some/page" }
       subject.stub(:script_name) { '' } # as not to depend on Rack env
-      subject.callback_url.should eq("#{url_base}/auth/CP/done")
+      expect(subject.callback_url).to eq("#{url_base}/auth/CP/done")
     end
 
   end
@@ -61,34 +62,35 @@ describe OmniAuth::Strategies::Challengepost do
     end
 
     it 'returns the id from raw_info' do
-      subject.uid.should eq('123')
+      expect(subject.uid).to eq('123')
     end
   end
 
   describe '#info' do
     context 'when optional data is not present in raw info' do
       before :each do
+
         subject.stub(:raw_info) { {} }
       end
 
       it 'has no email key' do
-        subject.info.should_not have_key('email')
+        expect(subject.info).to_not have_key('email')
       end
 
       it 'has no nickname key' do
-        subject.info.should_not have_key('nickname')
+        expect(subject.info).to_not have_key('nickname')
       end
 
       it 'has no first name key' do
-        subject.info.should_not have_key('first_name')
+        expect(subject.info).to_not have_key('first_name')
       end
 
       it 'has no last name key' do
-        subject.info.should_not have_key('last_name')
+        expect(subject.info).to_not have_key('last_name')
       end
 
       it 'has no location key' do
-        subject.info.should_not have_key('location')
+        expect(subject.info).to_not have_key('location')
       end
 
     end
@@ -100,32 +102,32 @@ describe OmniAuth::Strategies::Challengepost do
       end
 
       it 'returns the name' do
-        subject.info['nickname'].should eq('fredsmith')
+        expect(subject.info['nickname']).to eq('fredsmith')
       end
 
       it 'returns the email' do
         @raw_info['email'] = 'fred@smith.com'
-        subject.info['email'].should eq('fred@smith.com')
+        expect(subject.info['email']).to eq('fred@smith.com')
       end
 
       it 'returns the username as nickname' do
         @raw_info['screen_name'] = 'fredsmith'
-        subject.info['nickname'].should eq('fredsmith')
+        expect(subject.info['nickname']).to eq('fredsmith')
       end
 
       it 'returns the first name' do
         @raw_info['first_name'] = 'Fred'
-        subject.info['first_name'].should eq('Fred')
+        expect(subject.info['first_name']).to eq('Fred')
       end
 
       it 'returns the last name' do
         @raw_info['last_name'] = 'Smith'
-        subject.info['last_name'].should eq('Smith')
+        expect(subject.info['last_name']).to eq('Smith')
       end
 
       it 'returns the location name as location' do
         @raw_info['location'] = 'Palo Alto, California'
-        subject.info['location'].should eq('Palo Alto, California')
+        expect(subject.info['location']).to eq('Palo Alto, California')
       end
 
     end
