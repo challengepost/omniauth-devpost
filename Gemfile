@@ -4,4 +4,5 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'pry'
-gem 'pry-debugger'
+gem 'pry-debugger', platform: :ruby_19
+gem 'pry-byebug', platform: :ruby_21
