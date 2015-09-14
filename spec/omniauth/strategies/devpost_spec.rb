@@ -1,8 +1,8 @@
 require 'spec_helper'
-require 'omniauth-challengepost'
+require 'omniauth-devpost'
 require 'uri'
 
-describe OmniAuth::Strategies::Challengepost do
+describe OmniAuth::Strategies::Devpost do
   before do
     @request = double('Request')
     allow(@request).to receive(:params) { {} }
@@ -16,7 +16,7 @@ describe OmniAuth::Strategies::Challengepost do
 
   subject do
     args = [@app_id, @app_secret, @options].compact
-    OmniAuth::Strategies::Challengepost.new(nil, *args).tap do |strategy|
+    OmniAuth::Strategies::Devpost.new(nil, *args).tap do |strategy|
       allow(strategy).to receive(:request) { @request }
     end
   end
@@ -43,7 +43,7 @@ describe OmniAuth::Strategies::Challengepost do
       url_base = 'http://auth.request.com'
       allow(@request).to receive(:url) { "#{url_base}/some/page" }
       allow(subject).to receive(:script_name) { '' } # as not to depend on Rack env
-      expect(subject.callback_url).to eq("#{url_base}/auth/challengepost/callback")
+      expect(subject.callback_url).to eq("#{url_base}/auth/devpost/callback")
     end
 
     it "returns path from callback_path option" do

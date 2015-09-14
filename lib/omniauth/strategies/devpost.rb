@@ -3,13 +3,13 @@ require 'omniauth-oauth2'
 
 module OmniAuth
   module Strategies
-    class Challengepost < OmniAuth::Strategies::OAuth2
+    class Devpost < OmniAuth::Strategies::OAuth2
       DEFAULT_SCOPE = "user"
       OMNIAUTH_PROVIDER_SITE = ENV.fetch('OMNIAUTH_PROVIDER_SITE') { 'https://api.devpost.com' }
       OMNIAUTH_AUTHORIZE_URL = ENV.fetch('OMNIAUTH_AUTHORIZE_URL') { 'https://oauth.devpost.com/oauth/authorize' }
       OMNIAUTH_TOKEN_URL     = ENV.fetch('OMNIAUTH_TOKEN_URL') { 'https://oauth.devpost.com/oauth/token' }
 
-      option :name, "challengepost"
+      option :name, "devpost"
 
       option :client_options, {
         :site => OMNIAUTH_PROVIDER_SITE,

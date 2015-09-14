@@ -1,5 +1,5 @@
 module Omniauth
-  module Challengepost
+  module Devpost
     VERSION = "0.0.1"
   end
 end

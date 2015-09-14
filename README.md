@@ -1,12 +1,12 @@
-# Omniauth::Challengepost
+# Omniauth::Devpost
 
-Use this gem to authenticate against the (future) ChallengePost user api.
+Use this gem to authenticate against the (future) Devpost user api.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'omniauth-challengepost'
+    gem 'omniauth-devpost'
 
 And then execute:
 
@@ -14,12 +14,11 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install omniauth-challengepost
+    $ gem install omniauth-devpost
 
 ## Usage
 
-The ChallengePost user api only exists in development. Production version
-coming soon!
+The Devpost OAuth protocol is supported but not yet publicly available.
 
 ## Contributing
 
