@@ -25,15 +25,15 @@ describe OmniAuth::Strategies::Challengepost do
 
   describe '#client' do
     it 'has correct Facebook site' do
-      expect(subject.client.site).to eq('https://api.challengepost.com')
+      expect(subject.client.site).to eq('https://api.devpost.com')
     end
 
     it 'has correct authorize url' do
-      expect(subject.client.options[:authorize_url]).to eq('https://oauth.challengepost.com/oauth/authorize')
+      expect(subject.client.options[:authorize_url]).to eq('https://oauth.devpost.com/oauth/authorize')
     end
 
     it 'has correct token url' do
-      expect(subject.client.options[:token_url]).to eq('https://oauth.challengepost.com/oauth/token')
+      expect(subject.client.options[:token_url]).to eq('https://oauth.devpost.com/oauth/token')
     end
   end
 
