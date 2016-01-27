@@ -25,6 +25,7 @@ module OmniAuth
 
       info do
         prune!({
+          'name' => [raw_info['first_name'], raw_info['last_name']].select { |e| e.present? }.join(" "),
           'nickname' => raw_info['screen_name'],
           'email' => raw_info['email'],
           'location' => raw_info['location'],
