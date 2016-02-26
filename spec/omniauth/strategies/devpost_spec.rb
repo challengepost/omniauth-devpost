@@ -43,6 +43,7 @@ describe OmniAuth::Strategies::Devpost do
       url_base = 'http://auth.request.com'
       allow(@request).to receive(:url) { "#{url_base}/some/page" }
       allow(subject).to receive(:script_name) { '' } # as not to depend on Rack env
+      allow(@request).to receive(:query_string) { "" }
       expect(subject.callback_url).to eq("#{url_base}/auth/devpost/callback")
     end
 
@@ -50,6 +51,7 @@ describe OmniAuth::Strategies::Devpost do
       url_base = 'http://auth.request.com'
       @options = { :callback_path => "/auth/CP/done"}
       allow(@request).to receive(:url) { "#{url_base}/some/page" }
+      allow(@request).to receive(:query_string) { "" }
       allow(subject).to receive(:script_name) { '' } # as not to depend on Rack env
       expect(subject.callback_url).to eq("#{url_base}/auth/CP/done")
     end
@@ -70,7 +72,7 @@ describe OmniAuth::Strategies::Devpost do
     context 'when optional data is not present in raw info' do
       before :each do
 
-        allow(subject).to receive(:raw_info) { {} }
+        allow(subject).to receive(:raw_info) { { "urls" => {} } }
       end
 
       it 'has no email key' do
@@ -97,7 +99,7 @@ describe OmniAuth::Strategies::Devpost do
 
     context 'when optional data is present in raw info' do
       before :each do
-        @raw_info ||= { 'screen_name' => 'fredsmith' }
+        @raw_info ||= { 'screen_name' => 'fredsmith', 'urls' => {} }
         allow(subject).to receive(:raw_info) { @raw_info }
       end
 
@@ -128,6 +130,42 @@ describe OmniAuth::Strategies::Devpost do
       it 'returns the location name as location' do
         @raw_info['location'] = 'Palo Alto, California'
         expect(subject.info['location']).to eq('Palo Alto, California')
+      end
+
+      it 'returns social urls as urls' do
+        @raw_info['urls'] = {
+          "github" => "https://github.com/challengepost"
+        }
+        expect(subject.info['urls']['Github']).to eq("https://github.com/challengepost")
+      end
+
+      it 'returns expected urls when filled' do
+        @raw_info['url'] = 'https://devpost.com/whatever'
+        @raw_info['urls'] = [
+          "github",
+          "twitter",
+          "linkedin",
+          "website"
+        ].map { |service| [service, "https://#{service}.com/whatever"] }.to_h
+
+        expected_keys = [
+          "Devpost",
+          "Github",
+          "Twitter",
+          "LinkedIn",
+          "Website"
+        ]
+
+        expect(subject.info['urls'].keys).to match(expected_keys)
+      end
+
+      it 'key not present when url not filled' do
+        @raw_info['url'] = "https://devpost.com/whatever"
+        @raw_info['urls']['github'] = ""
+
+        not_expected_key = ["Github"]
+
+        expect(subject.info['urls'].keys).not_to include(not_expected_key)
       end
 
     end
