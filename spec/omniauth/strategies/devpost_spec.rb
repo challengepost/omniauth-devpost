@@ -128,7 +128,7 @@ describe OmniAuth::Strategies::Devpost do
       end
 
       it 'returns the location name as location' do
-        @raw_info['location'] = 'Palo Alto, California'
+        @raw_info['location'] = { 'address' => 'Palo Alto, California' }
         expect(subject.info['location']).to eq('Palo Alto, California')
       end
 

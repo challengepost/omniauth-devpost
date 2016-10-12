@@ -28,10 +28,9 @@ module OmniAuth
           'name' => [raw_info['first_name'], raw_info['last_name']].join(" ").strip,
           'nickname' => raw_info['screen_name'],
           'email' => raw_info['email'],
-          'location' => raw_info['location'],
+          'location' => (raw_info['location'] || {})['address'],
           'first_name' => raw_info['first_name'],
           'last_name' => raw_info['last_name'],
-          'location' => raw_info['location'],
           'description' => raw_info['tagline'],
           'image' => raw_info['avatar_url'],
           'urls' => {
